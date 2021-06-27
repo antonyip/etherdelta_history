@@ -34,7 +34,7 @@ type Trade @entity {
   tokenGive: String!
   tokenGet: String!
   getUser: String!
-  giveUSer: String!
+  giveUser: String!
 }
 type Deposit @entity {
   id: ID!

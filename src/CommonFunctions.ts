@@ -45,8 +45,10 @@ export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amo
     newOrder.amountGive = amountGive;
     newOrder.tokenGet = tokenGet.toHexString();
     newOrder.tokenGive = tokenGive.toHexString();
+    newOrder.save();
 
     thisUser.orders.push(newOrder.id);
+    thisUser.save();
 }
 
 export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, get: Address, give: Address) : void
@@ -62,6 +64,15 @@ export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amo
     newTrade.amountGive = amountGive;
     newTrade.tokenGet = tokenGet.toHexString();
     newTrade.tokenGive = tokenGive.toHexString();
+    newTrade.getUser = get.toHexString();
+    newTrade.giveUser = give.toHexString();
+    newTrade.save();
+
+    getUser.trades.push(newTrade.id);
+    getUser.save();
+    giveUser.trades.push(newTrade.id);
+    giveUser.save();
+
 }
 
 export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
@@ -75,8 +86,9 @@ export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amoun
     newDeposit.user = user.toHexString();
     newDeposit.amount = amount;
     newDeposit.token = token.toHexString();
-
+    newDeposit.save();
     thisUser.deposits.push(newDeposit.id);
+    thisUser.save();
 }
 
 export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
@@ -90,8 +102,9 @@ export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amou
     newWithdraw.user = user.toHexString();
     newWithdraw.amount = amount;
     newWithdraw.token = token.toHexString();
-
+    newWithdraw.save();
     thisUser.withdraws.push(newWithdraw.id);
+    thisUser.save();
 }
 
 export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, user: Address, expires: BigInt) : void
@@ -106,6 +119,7 @@ export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, am
     newCancel.amountGive = amountGive;
     newCancel.tokenGet = tokenGet.toHexString();
     newCancel.tokenGive = tokenGive.toHexString();
-
+    newCancel.save();
     thisUser.cancels.push(newCancel.id);
+    thisUser.save();
 }
