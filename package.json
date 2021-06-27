@@ -1,0 +1,16 @@
+{
+  "name": "etherdelta",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ antonyip/etherdelta",
+    "create-local": "graph create --node http://localhost:8020/ antonyip/etherdelta",
+    "remove-local": "graph remove --node http://localhost:8020/ antonyip/etherdelta",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 antonyip/etherdelta"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.20.1",
+    "@graphprotocol/graph-ts": "0.20.0"
+  }
+}
