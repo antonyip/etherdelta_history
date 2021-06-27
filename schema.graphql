@@ -1,6 +1,67 @@
-type ExampleEntity @entity {
+type User @entity {
   id: ID!
-  count: BigInt!
-  tokenGet: Bytes! # address
-  amountGet: BigInt! # uint256
+  tokens: [Token!]
+  orders: [Order!]
+  trades: [Trade!]
+  deposits: [Deposit!]
+  withdraws: [Withdraw!]
+  cancels: [Cancel!]
 }
+
+type Token @entity {
+  "Address of Token"
+  id: ID!
+  balance: BigInt!
+  name: String
+}
+
+type Order @entity {
+  id: ID!
+  block_number: BigInt!
+  timestamp: BigInt!
+  user: User!
+  amountGive: BigInt!
+  amountGet: BigInt!
+  tokenGive: String!
+  tokenGet: String!
+}
+type Trade @entity {
+  id: ID!
+  block_number: BigInt!
+  timestamp: BigInt!
+  amountGive: BigInt!
+  amountGet: BigInt!
+  tokenGive: String!
+  tokenGet: String!
+  getUser: String!
+  giveUSer: String!
+}
+type Deposit @entity {
+  id: ID!
+  block_number: BigInt!
+  timestamp: BigInt!
+  user: User!
+  amount: BigInt!
+  token: String!
+  balance: BigInt!
+}
+type Withdraw @entity {
+  id: ID!
+  block_number: BigInt!
+  timestamp: BigInt!
+  user: User!
+  amount: BigInt!
+  token: String!
+  balance: BigInt!
+}
+type Cancel @entity {
+  id: ID!
+  block_number: BigInt!
+  timestamp: BigInt!
+  user: User!
+  amountGive: BigInt!
+  amountGet: BigInt!
+  tokenGive: String!
+  tokenGet: String!
+}
+        
