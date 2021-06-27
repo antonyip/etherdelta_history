@@ -8,6 +8,7 @@ dataSources:
     source:
       address: "0xc6b330df38d6ef288c953f1f2835723531073ce2"
       abi: EtherDelta1
+      startBlock: 1000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -36,6 +37,7 @@ dataSources:
     source:
       address: "0x2136bbba2edca21afdddee838fff19ea70d10f03"
       abi: EtherDelta2
+      startBlock: 1800000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -67,6 +69,7 @@ dataSources:
     source:
       address: "0x4aea7cf559f67cedcad07e12ae6bc00f07e8cf65"
       abi: EtherDelta3
+      startBlock: 2100000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -98,6 +101,7 @@ dataSources:
     source:
       address: "0x373c55c277b866a69dc047cad488154ab9759466"
       abi: EtherDelta4
+      startBlock: 2500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -129,6 +133,7 @@ dataSources:
     source:
       address: "0x8d12a197cb00d4747a1fe03395095ce2a5cc6819"
       abi: EtherDelta5
+      startBlock: 3150000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

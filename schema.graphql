@@ -1,16 +1,22 @@
 type User @entity {
   id: ID!
-  tokens: [Token!]
-  orders: [Order!]
-  trades: [Trade!]
-  deposits: [Deposit!]
-  withdraws: [Withdraw!]
-  cancels: [Cancel!]
+  tokens: [Token!] @derivedFrom(field: "user")
+  orders: [Order!] @derivedFrom(field: "user")
+  giveTrades: [Trade!] @derivedFrom(field: "giveUser")
+  getTrades: [Trade!] @derivedFrom(field: "getUser")
+  deposits: [Deposit!] @derivedFrom(field: "user")
+  withdraws: [Withdraw!] @derivedFrom(field: "user")
+  cancels: [Cancel!] @derivedFrom(field: "user")
 }
 
+"ERC20 Token per User"
 type Token @entity {
-  "Address of Token"
+  "(User Address of Token)-(Address of Token)"
   id: ID!
+  "User Address of Token"
+  user: User!
+  "Address of Token"
+  address: String!
   balance: BigInt!
   name: String
 }
@@ -22,8 +28,8 @@ type Order @entity {
   user: User!
   amountGive: BigInt!
   amountGet: BigInt!
-  tokenGive: String!
-  tokenGet: String!
+  tokenGive: Token!
+  tokenGet: Token!
 }
 type Trade @entity {
   id: ID!
@@ -31,10 +37,10 @@ type Trade @entity {
   timestamp: BigInt!
   amountGive: BigInt!
   amountGet: BigInt!
-  tokenGive: String!
-  tokenGet: String!
-  getUser: String!
-  giveUser: String!
+  tokenGive: Token!
+  tokenGet: Token!
+  getUser: User!
+  giveUser: User!
 }
 type Deposit @entity {
   id: ID!
@@ -42,7 +48,7 @@ type Deposit @entity {
   timestamp: BigInt!
   user: User!
   amount: BigInt!
-  token: String!
+  token: Token!
   balance: BigInt!
 }
 type Withdraw @entity {
@@ -51,7 +57,7 @@ type Withdraw @entity {
   timestamp: BigInt!
   user: User!
   amount: BigInt!
-  token: String!
+  token: Token!
   balance: BigInt!
 }
 type Cancel @entity {
@@ -61,7 +67,7 @@ type Cancel @entity {
   user: User!
   amountGive: BigInt!
   amountGet: BigInt!
-  tokenGive: String!
-  tokenGet: String!
+  tokenGive: Token!
+  tokenGet: Token!
 }
         

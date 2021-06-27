@@ -1,5 +1,5 @@
 import { BigInt, Address, Bytes } from "@graphprotocol/graph-ts";
-import { Deposit, Order, Trade, User } from "../generated/schema"
+import { Deposit, Order, Token, Trade, User } from "../generated/schema"
 class BasicInfo
 {
     address: string;
@@ -33,6 +33,21 @@ function getOrCreateUser(address: string) : User
     return user as User;
 }
 
+function getOrCreateToken(address: Address, user: Address) : Token
+{
+    let uniqueKey = address.toHexString().concat("-").concat(user.toHexString());
+    let token = Token.load(uniqueKey);
+    if (token == null)
+    {
+        token = new Token(uniqueKey);
+        token.balance = new BigInt(0);
+        token.address = address.toHexString();
+        token.user = getOrCreateUser(user.toHexString()).id;
+        token.save();
+    }
+    return token as Token;
+}
+
 export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, user: Address, expires: BigInt) : void
 {
     let thisUser = getOrCreateUser(user.toHexString());
@@ -43,8 +58,8 @@ export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amo
     newOrder.user = user.toHexString();
     newOrder.amountGet = amountGet;
     newOrder.amountGive = amountGive;
-    newOrder.tokenGet = tokenGet.toHexString();
-    newOrder.tokenGive = tokenGive.toHexString();
+    newOrder.tokenGet = getOrCreateToken(tokenGet, user).id;
+    newOrder.tokenGive = getOrCreateToken(tokenGive, user).id;
     newOrder.save();
 
     thisUser.orders.push(newOrder.id);
@@ -54,25 +69,20 @@ export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amo
 export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, get: Address, give: Address) : void
 {
     let getUser = getOrCreateUser(get.toHexString());
-    let giveUser = getOrCreateUser(give.toHexString());
+    let newTradeGet = new Trade(basicInfo.tx_id)
+    newTradeGet.block_number = basicInfo.block_number;
+    newTradeGet.timestamp = basicInfo.block_timestamp;
 
-    let newTrade = new Trade(basicInfo.tx_id)
-    newTrade.block_number = basicInfo.block_number;
-    newTrade.timestamp = basicInfo.block_timestamp;
+    newTradeGet.amountGet = amountGet;
+    newTradeGet.amountGive = amountGive;
+    newTradeGet.tokenGet = getOrCreateToken(tokenGet, get).id;
+    newTradeGet.tokenGive = getOrCreateToken(tokenGive, get).id;
+    newTradeGet.getUser = get.toHexString();
+    newTradeGet.giveUser = give.toHexString();
+    newTradeGet.save();
 
-    newTrade.amountGet = amountGet;
-    newTrade.amountGive = amountGive;
-    newTrade.tokenGet = tokenGet.toHexString();
-    newTrade.tokenGive = tokenGive.toHexString();
-    newTrade.getUser = get.toHexString();
-    newTrade.giveUser = give.toHexString();
-    newTrade.save();
-
-    getUser.trades.push(newTrade.id);
+    getUser.getTrades.push(newTradeGet.id);
     getUser.save();
-    giveUser.trades.push(newTrade.id);
-    giveUser.save();
-
 }
 
 export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
@@ -85,7 +95,8 @@ export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amoun
 
     newDeposit.user = user.toHexString();
     newDeposit.amount = amount;
-    newDeposit.token = token.toHexString();
+    newDeposit.token = getOrCreateToken(token, user).id;
+    newDeposit.balance = balance;
     newDeposit.save();
     thisUser.deposits.push(newDeposit.id);
     thisUser.save();
@@ -101,7 +112,8 @@ export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amou
 
     newWithdraw.user = user.toHexString();
     newWithdraw.amount = amount;
-    newWithdraw.token = token.toHexString();
+    newWithdraw.token = getOrCreateToken(token, user).id;
+    newWithdraw.balance = balance;
     newWithdraw.save();
     thisUser.withdraws.push(newWithdraw.id);
     thisUser.save();
@@ -117,8 +129,8 @@ export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, am
     newCancel.user = user.toHexString();
     newCancel.amountGet = amountGet;
     newCancel.amountGive = amountGive;
-    newCancel.tokenGet = tokenGet.toHexString();
-    newCancel.tokenGive = tokenGive.toHexString();
+    newCancel.tokenGet = getOrCreateToken(tokenGet, user).id;
+    newCancel.tokenGive = getOrCreateToken(tokenGive, user).id;
     newCancel.save();
     thisUser.cancels.push(newCancel.id);
     thisUser.save();
