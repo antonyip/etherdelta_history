@@ -91,15 +91,19 @@ export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amo
     // Token Activity
     let tokenActivity = getTotalTokenActivity(newOrder.tokenGet);
     tokenActivity.orderCount = tokenActivity.orderCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getTotalTokenActivity(newOrder.tokenGive);
     tokenActivity.orderCount = tokenActivity.orderCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getOrCreateDailyTokenActivity(newOrder.timestamp, newOrder.tokenGet);
     tokenActivity.orderCount = tokenActivity.orderCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getOrCreateDailyTokenActivity(newOrder.timestamp, newOrder.tokenGive);
     tokenActivity.orderCount = tokenActivity.orderCount.plus(ONE);
+    tokenActivity.save();
 }
 
 export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, get: Address, give: Address) : void
@@ -141,15 +145,19 @@ export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amo
     // Token Activity
     let tokenActivity = getTotalTokenActivity(newTrade.tokenGet);
     tokenActivity.tradeCount = tokenActivity.tradeCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getTotalTokenActivity(newTrade.tokenGive);
     tokenActivity.tradeCount = tokenActivity.tradeCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getOrCreateDailyTokenActivity(newTrade.timestamp, newTrade.tokenGet);
     tokenActivity.tradeCount = tokenActivity.tradeCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getOrCreateDailyTokenActivity(newTrade.timestamp, newTrade.tokenGive);
     tokenActivity.tradeCount = tokenActivity.tradeCount.plus(ONE);
+    tokenActivity.save();
 }
 
 export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
@@ -189,9 +197,11 @@ export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amoun
     // Token Activity
     let tokenActivity = getTotalTokenActivity(newDeposit.token);
     tokenActivity.depositCount = tokenActivity.depositCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getOrCreateDailyTokenActivity(newDeposit.timestamp, newDeposit.token);
     tokenActivity.depositCount = tokenActivity.depositCount.plus(ONE);
+    tokenActivity.save();
 }
 
 export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
@@ -231,9 +241,11 @@ export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amou
     // Token Activity
     let tokenActivity = getTotalTokenActivity(newWithdraw.token);
     tokenActivity.withdrawCount = tokenActivity.withdrawCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getOrCreateDailyTokenActivity(newWithdraw.timestamp, newWithdraw.token);
     tokenActivity.withdrawCount = tokenActivity.withdrawCount.plus(ONE);
+    tokenActivity.save();
 }
 
 export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, user: Address, expires: BigInt) : void
@@ -275,15 +287,19 @@ export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, am
     // Token Activity
     let tokenActivity = getTotalTokenActivity(newCancel.tokenGet);
     tokenActivity.cancelCount = tokenActivity.cancelCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getTotalTokenActivity(newCancel.tokenGive);
     tokenActivity.cancelCount = tokenActivity.cancelCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getOrCreateDailyTokenActivity(newCancel.timestamp, newCancel.tokenGet);
     tokenActivity.cancelCount = tokenActivity.cancelCount.plus(ONE);
+    tokenActivity.save();
 
     tokenActivity = getOrCreateDailyTokenActivity(newCancel.timestamp, newCancel.tokenGive);
     tokenActivity.cancelCount = tokenActivity.cancelCount.plus(ONE);
+    tokenActivity.save();
 }
 
 // Activity Counting
