@@ -99,7 +99,7 @@ type Activity @entity {
   NetDeposits: BigInt!
   TotalTradeCount: BigInt!
 
-  TokenActivity: [PairActivityToToken!]
+  TokenActivity: [PairActivityToToken!] @derivedFrom(field: "activity")
   UniqueUsers: [User!]
 }
 
@@ -113,12 +113,12 @@ type TokenActivity @entity {
   depositCount: BigInt!
   orderCount: BigInt!
   cancelCount: BigInt!
-  Activity: [PairActivityToToken!]
+  Activity: [PairActivityToToken!] @derivedFrom(field: "tokenActivity")
 }
 
 type PairActivityToToken @entity {
   "activity-tokenActivity"
   id: ID!
-  activity: Activity! @derivedFrom(field: "TokenActivity")
-  tokenActivity: TokenActivity! @derivedFrom(field: "Activity")
+  activity: Activity! 
+  tokenActivity: TokenActivity! 
 }
