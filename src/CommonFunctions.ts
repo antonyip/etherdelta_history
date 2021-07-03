@@ -46,9 +46,6 @@ function getOrCreateToken(address: Address) : Token
         token = new Token(uniqueKey);
         token.name = "todo..";
         token.address = address.toHexString();
-        //token.balance = new BigInt(0);
-        //token.address = address.toHexString();
-        //token.user = getOrCreateUser(user.toHexString()).id;
         token.save();
     }
     return token as Token;
@@ -90,43 +87,69 @@ export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amo
     activity.TokenActivity.push(newOrder.tokenGive);
     activity.UniqueUsers.push(thisUser.id);
     activity.save();
+
+    // Token Activity
+    let tokenActivity = getTotalTokenActivity(newOrder.tokenGet);
+    tokenActivity.orderCount = tokenActivity.orderCount.plus(ONE);
+
+    tokenActivity = getTotalTokenActivity(newOrder.tokenGive);
+    tokenActivity.orderCount = tokenActivity.orderCount.plus(ONE);
+
+    tokenActivity = getOrCreateDailyTokenActivity(newOrder.timestamp, newOrder.tokenGet);
+    tokenActivity.orderCount = tokenActivity.orderCount.plus(ONE);
+
+    tokenActivity = getOrCreateDailyTokenActivity(newOrder.timestamp, newOrder.tokenGive);
+    tokenActivity.orderCount = tokenActivity.orderCount.plus(ONE);
 }
 
 export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, get: Address, give: Address) : void
 {
     let getUser = getOrCreateUser(get.toHexString());
-    let newTradeGet = new Trade(basicInfo.tx_id)
-    newTradeGet.block_number = basicInfo.block_number;
-    newTradeGet.timestamp = basicInfo.block_timestamp;
+    let newTrade = new Trade(basicInfo.tx_id)
+    newTrade.block_number = basicInfo.block_number;
+    newTrade.timestamp = basicInfo.block_timestamp;
 
-    newTradeGet.amountGet = amountGet;
-    newTradeGet.amountGive = amountGive;
-    newTradeGet.tokenGet = getOrCreateToken(tokenGet).id;
-    newTradeGet.tokenGive = getOrCreateToken(tokenGive).id;
-    newTradeGet.getUser = get.toHexString();
-    newTradeGet.giveUser = give.toHexString();
-    newTradeGet.save();
+    newTrade.amountGet = amountGet;
+    newTrade.amountGive = amountGive;
+    newTrade.tokenGet = getOrCreateToken(tokenGet).id;
+    newTrade.tokenGive = getOrCreateToken(tokenGive).id;
+    newTrade.getUser = get.toHexString();
+    newTrade.giveUser = give.toHexString();
+    newTrade.save();
 
-    getUser.getTrades.push(newTradeGet.id);
+    getUser.getTrades.push(newTrade.id);
     getUser.save();
 
     // total activity
     let activity = getTotalActivity();
-    activity.trade.push(newTradeGet.id);
+    activity.trade.push(newTrade.id);
     activity.TotalTradeCount = activity.TotalTradeCount.plus(ONE);
-    activity.TokenActivity.push(newTradeGet.tokenGet);
-    activity.TokenActivity.push(newTradeGet.tokenGive);
+    activity.TokenActivity.push(newTrade.tokenGet);
+    activity.TokenActivity.push(newTrade.tokenGive);
     activity.UniqueUsers.push(getUser.id);
     activity.save();
 
     // daily activity
     activity = getOrCreateDailyActivity(basicInfo.block_timestamp);
-    activity.trade.push(newTradeGet.id);
+    activity.trade.push(newTrade.id);
     activity.TotalTradeCount = activity.TotalTradeCount.plus(ONE);
-    activity.TokenActivity.push(newTradeGet.tokenGet);
-    activity.TokenActivity.push(newTradeGet.tokenGive);
+    activity.TokenActivity.push(newTrade.tokenGet);
+    activity.TokenActivity.push(newTrade.tokenGive);
     activity.UniqueUsers.push(getUser.id);
     activity.save();
+
+    // Token Activity
+    let tokenActivity = getTotalTokenActivity(newTrade.tokenGet);
+    tokenActivity.tradeCount = tokenActivity.tradeCount.plus(ONE);
+
+    tokenActivity = getTotalTokenActivity(newTrade.tokenGive);
+    tokenActivity.tradeCount = tokenActivity.tradeCount.plus(ONE);
+
+    tokenActivity = getOrCreateDailyTokenActivity(newTrade.timestamp, newTrade.tokenGet);
+    tokenActivity.tradeCount = tokenActivity.tradeCount.plus(ONE);
+
+    tokenActivity = getOrCreateDailyTokenActivity(newTrade.timestamp, newTrade.tokenGive);
+    tokenActivity.tradeCount = tokenActivity.tradeCount.plus(ONE);
 }
 
 export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
@@ -162,6 +185,13 @@ export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amoun
     activity.TokenActivity.push(newDeposit.token);
     activity.UniqueUsers.push(thisUser.id);
     activity.save();
+
+    // Token Activity
+    let tokenActivity = getTotalTokenActivity(newDeposit.token);
+    tokenActivity.depositCount = tokenActivity.depositCount.plus(ONE);
+
+    tokenActivity = getOrCreateDailyTokenActivity(newDeposit.timestamp, newDeposit.token);
+    tokenActivity.depositCount = tokenActivity.depositCount.plus(ONE);
 }
 
 export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
@@ -197,6 +227,13 @@ export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amou
     activity.TokenActivity.push(newWithdraw.token);
     activity.UniqueUsers.push(thisUser.id);
     activity.save();
+
+    // Token Activity
+    let tokenActivity = getTotalTokenActivity(newWithdraw.token);
+    tokenActivity.withdrawCount = tokenActivity.withdrawCount.plus(ONE);
+
+    tokenActivity = getOrCreateDailyTokenActivity(newWithdraw.timestamp, newWithdraw.token);
+    tokenActivity.withdrawCount = tokenActivity.withdrawCount.plus(ONE);
 }
 
 export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, user: Address, expires: BigInt) : void
@@ -234,6 +271,19 @@ export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, am
     activity.TokenActivity.push(newCancel.tokenGive);
     activity.UniqueUsers.push(thisUser.id);
     activity.save();
+
+    // Token Activity
+    let tokenActivity = getTotalTokenActivity(newCancel.tokenGet);
+    tokenActivity.cancelCount = tokenActivity.cancelCount.plus(ONE);
+
+    tokenActivity = getTotalTokenActivity(newCancel.tokenGive);
+    tokenActivity.cancelCount = tokenActivity.cancelCount.plus(ONE);
+
+    tokenActivity = getOrCreateDailyTokenActivity(newCancel.timestamp, newCancel.tokenGet);
+    tokenActivity.cancelCount = tokenActivity.cancelCount.plus(ONE);
+
+    tokenActivity = getOrCreateDailyTokenActivity(newCancel.timestamp, newCancel.tokenGive);
+    tokenActivity.cancelCount = tokenActivity.cancelCount.plus(ONE);
 }
 
 // Activity Counting
