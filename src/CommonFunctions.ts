@@ -237,7 +237,7 @@ export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amou
     // total activity
     let activity = getTotalActivity();
     activity.deposit.push(newWithdraw.id);
-    activity.TotalWithdraws = activity.TotalWithdraws.minus(ONE);
+    activity.TotalWithdraws = activity.TotalWithdraws.plus(ONE);
     activity.NetDeposits = activity.NetDeposits.minus(ONE);
     activity.TokenActivity.push(tokenActivity.id);
     activity.UniqueUsers.push(thisUser.id);
@@ -246,7 +246,7 @@ export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amou
     // daily activity
     activity = getOrCreateDailyActivity(basicInfo.block_timestamp);
     activity.deposit.push(newWithdraw.id);
-    activity.TotalWithdraws = activity.TotalWithdraws.minus(ONE);
+    activity.TotalWithdraws = activity.TotalWithdraws.plus(ONE);
     activity.NetDeposits = activity.NetDeposits.minus(ONE);
     activity.TokenActivity.push(dailyTokenActivity.id);
     activity.UniqueUsers.push(thisUser.id);
