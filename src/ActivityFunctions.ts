@@ -36,7 +36,7 @@ export function getOrCreateDailyTokenActivity(timestamp: BigInt, add: string) : 
     {
         timestampDay = timestamp.div(TIME_SECONDS).div(TIME_MINUTES).div(TIME_HOURS);
     }
-    let id = add.concat(timestampDay.toString());
+    let id = add.concat("-").concat(timestampDay.toString());
     let tokenActivity = TokenActivity.load(id)
     if (tokenActivity == null)
     {

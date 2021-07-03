@@ -1,4 +1,5 @@
 type User @entity {
+  "Address"
   id: ID!
   #tokens: [TokenBalance!] @derivedFrom(field: "user")
   orders: [Order!] @derivedFrom(field: "user")
@@ -83,11 +84,11 @@ type Cancel @entity {
 type Activity @entity {
   "block_timestamp/60/60/24 (0 is current id)"
   id: ID!
-  orders: [Order]!
-  trade: [Trade]!
-  deposit: [Deposit]!
-  withdraw: [Withdraw]!
-  cancel: [Cancel]!
+  orders: [Order!]
+  trade: [Trade!]
+  deposit: [Deposit!]
+  withdraw: [Withdraw!]
+  cancel: [Cancel!]
 
   TotalOrderCount: BigInt!
   TotalCancelCount: BigInt!
@@ -97,8 +98,8 @@ type Activity @entity {
   NetDeposits: BigInt!
   TotalTradeCount: BigInt!
 
-  TokenActivity: [TokenActivity]!
-  UniqueUsers: [User]!
+  TokenActivity: [TokenActivity!]
+  UniqueUsers: [User!]
 }
 
 type TokenActivity @entity {
