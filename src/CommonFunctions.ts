@@ -26,12 +26,13 @@ export function CollectBasicInfo(address: string , block_timestamp: BigInt , blo
     return basicInfo;
 }
 
-function getOrCreateUser(address: string) : User
+function getOrCreateUser(address: Bytes) : User
 {
-    let user = User.load(address);
+    let user = User.load(address.toHexString());
     if (user == null)
     {
-        user = new User(address);
+        user = new User(address.toHexString());
+        user.address = address;
         user.save();
     }
     return user as User;
@@ -66,7 +67,7 @@ function getOrCreateActivityToToken(activityID: string, tokenActivityID: string)
 
 export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, user: Address, expires: BigInt) : void
 {
-    let thisUser = getOrCreateUser(user.toHexString());
+    let thisUser = getOrCreateUser(user);
 
     let newOrder = new Order(basicInfo.tx_id)
     newOrder.block_number = basicInfo.block_number;
@@ -133,7 +134,7 @@ export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amo
 
 export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, get: Address, give: Address) : void
 {
-    let getUser = getOrCreateUser(get.toHexString());
+    let getUser = getOrCreateUser(get);
     let newTrade = new Trade(basicInfo.tx_id)
     newTrade.block_number = basicInfo.block_number;
     newTrade.timestamp = basicInfo.block_timestamp;
@@ -197,7 +198,7 @@ export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amo
 
 export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
 {
-    let thisUser = getOrCreateUser(user.toHexString());
+    let thisUser = getOrCreateUser(user);
 
     let newDeposit = new Deposit(basicInfo.tx_id);
     newDeposit.block_number = basicInfo.block_number;
@@ -245,7 +246,7 @@ export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amoun
 
 export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amount: BigInt, token: Address, balance: BigInt) : void
 {
-    let thisUser = getOrCreateUser(user.toHexString());
+    let thisUser = getOrCreateUser(user);
 
     let newWithdraw = new Withdraw(basicInfo.tx_id);
     newWithdraw.block_number = basicInfo.block_number;
@@ -295,7 +296,7 @@ export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amou
 
 export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, amountGive: BigInt, tokenGet: Address, tokenGive: Address, user: Address, expires: BigInt) : void
 {
-    let thisUser = getOrCreateUser(user.toHexString());
+    let thisUser = getOrCreateUser(user);
 
     let newCancel = new Cancel(basicInfo.tx_id)
     newCancel.block_number = basicInfo.block_number;

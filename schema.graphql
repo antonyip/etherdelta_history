@@ -1,14 +1,16 @@
 type User @entity {
   "Address"
   id: ID!
+  "Address"
+  address: Bytes!
   #tokens: [TokenBalance!] @derivedFrom(field: "user")
   orders: [Order!] @derivedFrom(field: "user")
-  giveTrades: [Trade!] @derivedFrom(field: "giveUser")
-  getTrades: [Trade!] @derivedFrom(field: "getUser")
+  giveTrades: [PairUserToTrade!] @derivedFrom(field: "user")
+  getTrades: [PairUserToTrade!] @derivedFrom(field: "user")
   deposits: [Deposit!] @derivedFrom(field: "user")
   withdraws: [Withdraw!] @derivedFrom(field: "user")
   cancels: [Cancel!] @derivedFrom(field: "user")
-  activity: [Activity!] @derivedFrom(field: "UniqueUsers")
+  activities: [PairActivityToUser!] @derivedFrom(field: "user")
 }
 
 type Token @entity {
@@ -40,7 +42,9 @@ type Order @entity {
   amountGet: BigInt!
   tokenGive: Token!
   tokenGet: Token!
+  activities: [PairActivityToOrder!] @derivedFrom(field: "order")
 }
+
 type Trade @entity {
   id: ID!
   block_number: BigInt!
@@ -51,6 +55,7 @@ type Trade @entity {
   tokenGet: Token!
   getUser: User!
   giveUser: User!
+  activities: [PairActivityToTrade!] @derivedFrom(field: "trade")
 }
 type Deposit @entity {
   id: ID!
@@ -87,11 +92,11 @@ type Activity @entity {
   id: ID!
   "for sorting purposes"
   dayTimestamp: BigInt!
-  orders: [Order!]
-  trade: [Trade!]
-  deposit: [Deposit!]
-  withdraw: [Withdraw!]
-  cancel: [Cancel!]
+  orders: [PairActivityToOrder!] @derivedFrom(field: "activity")
+  trade: [PairActivityToTrade!] @derivedFrom(field: "activity")
+  deposit: [PairActivityToDeposit!] @derivedFrom(field: "activity")
+  withdraw: [PairActivityToWithdraw!] @derivedFrom(field: "activity")
+  cancel: [PairActivityToCancel!] @derivedFrom(field: "activity")
 
   TotalOrderCount: BigInt!
   TotalCancelCount: BigInt!
@@ -102,7 +107,7 @@ type Activity @entity {
   TotalTradeCount: BigInt!
 
   TokenActivity: [PairActivityToToken!] @derivedFrom(field: "activity")
-  UniqueUsers: [User!]
+  UniqueUsers: [PairActivityToUser!] @derivedFrom(field: "activity")
 }
 
 type TokenActivity @entity {
@@ -125,4 +130,48 @@ type PairActivityToToken @entity {
   id: ID!
   activity: Activity! 
   tokenActivity: TokenActivity! 
+}
+
+type PairActivityToUser @entity {
+  "activity-user"
+  id: ID!
+  activity: Activity! 
+  user: User! 
+}
+
+type PairActivityToOrder @entity {
+  "activity-Order"
+  id: ID!
+  activity: Activity! 
+  order: Order! 
+}
+type PairActivityToTrade @entity {
+  "activity-Trade"
+  id: ID!
+  activity: Activity! 
+  trade: Trade! 
+}
+type PairActivityToDeposit @entity {
+  "activity-Deposit"
+  id: ID!
+  activity: Activity! 
+  deposit: Deposit! 
+}
+type PairActivityToWithdraw @entity {
+  "activity-Withdraw"
+  id: ID!
+  activity: Activity! 
+  withdraw: Withdraw! 
+}
+type PairActivityToCancel @entity {
+  "activity-Cancel"
+  id: ID!
+  activity: Activity! 
+  cancel: Cancel! 
+}
+type PairUserToTrade @entity {
+  "user-Trade"
+  id: ID!
+  user: User! 
+  trade: Trade! 
 }
