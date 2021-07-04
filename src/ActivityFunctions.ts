@@ -13,10 +13,12 @@ export function getOrCreateDailyActivity(timestamp: BigInt) : Activity
     {
         timestampDay = timestamp.div(TIME_SECONDS).div(TIME_MINUTES).div(TIME_HOURS);
     }
+    
     let activity = Activity.load(timestampDay.toString())
     if (activity == null)
     {
         activity = new Activity(timestampDay.toString())
+        activity.dayTimestamp = timestampDay;
         activity.TotalOrderCount = ZERO
         activity.TotalCancelCount = ZERO
         activity.NetOrderCount = ZERO
@@ -41,6 +43,7 @@ export function getOrCreateDailyTokenActivity(timestamp: BigInt, add: string) : 
     if (tokenActivity == null)
     {
         tokenActivity = new TokenActivity(id)
+        tokenActivity.dayTimestamp = timestampDay;
         tokenActivity.address = add;
         tokenActivity.tradeCount = ZERO
         tokenActivity.withdrawCount = ZERO

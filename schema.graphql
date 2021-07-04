@@ -85,6 +85,8 @@ type Cancel @entity {
 type Activity @entity {
   "block_timestamp/60/60/24 (0 is current id)"
   id: ID!
+  "for sorting purposes"
+  dayTimestamp: BigInt!
   orders: [Order!]
   trade: [Trade!]
   deposit: [Deposit!]
@@ -106,6 +108,8 @@ type Activity @entity {
 type TokenActivity @entity {
   "block_timestamp/60/60/24-address (0 is the current id)"
   id: ID!
+  "for sorting purposes"
+  dayTimestamp: BigInt!
   "token address"
   address: String!
   tradeCount: BigInt!
