@@ -1,6 +1,16 @@
 import React, { Component, useState } from 'react'
-import ApolloClient, { gql, InMemoryCache } from 'apollo-boost'
-import { ApolloProvider, Query, withApollo } from 'react-apollo'
+//import ApolloClient, { InMemoryCache, gql, useQuery} from 'apollo-boost'
+//import { ApolloProvider, Query, withApollo } from 'react-apollo'
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql,
+  useApolloClient
+} from "@apollo/client";
+import { Query, Mutation, Subscription } from '@apollo/client/react/components';
+import { graphql } from '@apollo/client/react/hoc';
 import {
   Grid,
   LinearProgress,
@@ -18,7 +28,19 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-const GRAVATARS_QUERY = gql` 
+// client
+//   .query({
+//     query: gql`
+//     {
+//       activities(id: "17048") {
+//         id
+//       }
+//     }
+//     `
+//   })
+//   .then(result => {console.log("1");console.log(result);console.log("2");});
+
+const QUERY=gql`
 {
   activities(id: "17048") {
     id
@@ -26,47 +48,25 @@ const GRAVATARS_QUERY = gql`
 }
 `
 
+function ExchangeRates() {
+  const { loading, error, data } = useQuery(QUERY);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  return data.activities.map(({ id }) => (
+    <div key={id}>
+      <p>
+        {id}: {id}
+      </p>
+    </div>
+  ));
+}
+
 const TradeDetails = ({  }) => (
   <Grid container direction="row" alignItems="center">
     <ApolloProvider client={client}>
-        <Query
-      query={GRAVATARS_QUERY}
-        variables={{
-          WhatIWant: 5,
-          where: {
-            ...( true ? { WhatIWant: '5'} : {}),
-          },
-        }}
-      >
-        {({ data, error, loading }) => {
-          let dataArrTradesX = [];
-          let dataArrTradesY = [];
-          let dataArrTrades = [];
-          let dataArrTradesOptions = [];
-
-          if (!loading && !error)
-          {
-            // dataArrTradesX = data.activity.map((d)=>{
-            //   return 1
-            // })
-          }
-
-          return loading ? (
-            <LinearProgress variant="query" style={{ width: '100%' }} />
-          ) : error ? (
-            <Grid container> {error} </Grid>
-          ) : (
-            <Grid container>
-              <Grid item>
-                <Typography>
-                  {dataArrTradesX.join('\n')}
-                </Typography>
-              </Grid>
-            </Grid>
-          )
-        }}
-      </Query>
-      </ApolloProvider>
+      <ExchangeRates></ExchangeRates>
+    </ApolloProvider>
   </Grid>
 )
 

@@ -1,6 +1,9 @@
 import { BigInt, Address, Bytes } from "@graphprotocol/graph-ts";
 import { Deposit, Withdraw, Order, Token, Trade, User, Cancel, PairActivityToToken } from "../generated/schema"
-import { getOrCreateDailyActivity, getOrCreateDailyTokenActivity ,getTotalTokenActivity,getTotalActivity } from "./ActivityFunctions"
+import { getOrCreateDailyActivity, getOrCreateDailyTokenActivity 
+    ,getTotalTokenActivity,getTotalActivity 
+    ,getActivityUserPairing
+} from "./ActivityFunctions"
 
 let ONE = BigInt.fromI32(1);
 
@@ -145,11 +148,9 @@ export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amo
     newTrade.tokenGive = getOrCreateToken(tokenGive).id;
     newTrade.getUser = get.toHexString();
     newTrade.giveUser = give.toHexString();
+
     newTrade.save();
-
-    getUser.getTrades.push(newTrade.id);
     getUser.save();
-
 
     // Token Activity
     let tokenTotalActivityTokenGet = getTotalTokenActivity(newTrade.tokenGet);

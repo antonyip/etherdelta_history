@@ -30,7 +30,7 @@ const Filter = ({
 }) => (
   <Grid item>
     <Grid container direction="row">
-      <FormControlLabel
+      {/* <FormControlLabel
         control={
           <Checkbox
             checked={withName}
@@ -63,7 +63,7 @@ const Filter = ({
         }
         label="Order By:"
         labelPlacement="start"
-      />
+      /> */}
         <TextField
           label="Start Date"
           type="date"

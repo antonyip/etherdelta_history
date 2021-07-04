@@ -106,7 +106,9 @@ type Activity @entity {
   NetDeposits: BigInt!
   TotalTradeCount: BigInt!
 
+  "This shows how many different tokens interacted with this Activity on this day"
   TokenActivity: [PairActivityToToken!] @derivedFrom(field: "activity")
+  "This shows how many users interacted with this Activity on this day"
   UniqueUsers: [PairActivityToUser!] @derivedFrom(field: "activity")
 }
 

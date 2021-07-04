@@ -23,6 +23,10 @@ https://thegraph.com/explorer/subgraph/antonyip/etherdelta
 Refer to Readme in the frontend photos
 
 ## Screenshots of the project
+- DAPP front page
 ![frontend](./screenshots/frontpage.PNG)
+- What are the total stats on EtherDelta
 ![frontend](./screenshots/backend.PNG)
+- On X Day, What are the tokens that interacted with EtherDelta
+![frontend](./screenshots/specificCapture.PNG)
 

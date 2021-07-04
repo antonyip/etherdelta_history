@@ -1,5 +1,5 @@
 import { BigInt, Address, Bytes } from "@graphprotocol/graph-ts";
-import { Activity, TokenActivity } from "../generated/schema"
+import { Activity, PairActivityToTrade, PairActivityToUser, PairUserToTrade, TokenActivity } from "../generated/schema"
 
 let TIME_SECONDS = BigInt.fromI32(60);
 let TIME_MINUTES = BigInt.fromI32(60);
@@ -63,4 +63,18 @@ export function getTotalActivity() : Activity
 export function getTotalTokenActivity(add: string) : TokenActivity
 {
     return getOrCreateDailyTokenActivity(ZERO, add);
+}
+
+// Activity User Pairing
+export function getActivityUserPairing(activity: string, user:string) : PairActivityToUser {
+
+    let id = activity.concat("-").concat(user);
+    let pairActivityToUser = PairActivityToUser.load(id)
+    if (pairActivityToUser == null)
+    {
+        pairActivityToUser = new PairActivityToUser(id)
+        pairActivityToUser.user = user;
+        pairActivityToUser.activity = activity;
+    }
+    return pairActivityToUser as PairActivityToUser;
 }
