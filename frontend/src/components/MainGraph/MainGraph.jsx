@@ -17,6 +17,7 @@ import {
   IconButton,
 } from '@material-ui/core'
 import { Line, Bar } from 'react-chartjs-2';
+import TradeDetails from './TradeDetails';
 
 if (!process.env.REACT_APP_GRAPHQL_ENDPOINT) {
   throw new Error('REACT_APP_GRAPHQL_ENDPOINT environment variable not defined')
@@ -262,6 +263,16 @@ const MainGraph = ({ DaysFrom1970 }) => (
         <MainGraphQuery
         aaa={DaysFrom1970}
         ></MainGraphQuery>
+      </ApolloProvider>
+    </Grid>
+    <Grid item xs={6}>
+      <ApolloProvider client={client}>
+        <TradeDetails
+        DaysFrom1970={DaysFrom1970}
+        ></TradeDetails>
+        <TradeDetails
+        DaysFrom1970={DaysFrom1970}
+        ></TradeDetails>
       </ApolloProvider>
     </Grid>
   </Grid>

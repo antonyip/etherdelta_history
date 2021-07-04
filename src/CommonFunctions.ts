@@ -7,6 +7,11 @@ import { getOrCreateDailyActivity, getOrCreateDailyTokenActivity
 
 let ONE = BigInt.fromI32(1);
 
+let TIME_SECONDS = BigInt.fromI32(60);
+let TIME_MINUTES = BigInt.fromI32(60);
+let TIME_HOURS = BigInt.fromI32(24);
+let ZERO = BigInt.fromI32(0);
+
 class BasicInfo
 {
     address: string;
@@ -75,6 +80,7 @@ export function InternalHandleOrder(basicInfo: BasicInfo, amountGet: BigInt, amo
     let newOrder = new Order(basicInfo.tx_id)
     newOrder.block_number = basicInfo.block_number;
     newOrder.timestamp = basicInfo.block_timestamp;
+    newOrder.dayTimestamp = basicInfo.block_timestamp.div(TIME_HOURS).div(TIME_MINUTES).div(TIME_SECONDS)
     newOrder.user = user.toHexString();
     newOrder.amountGet = amountGet;
     newOrder.amountGive = amountGive;
@@ -141,7 +147,7 @@ export function InternalHandleTrade(basicInfo: BasicInfo, amountGet: BigInt, amo
     let newTrade = new Trade(basicInfo.tx_id)
     newTrade.block_number = basicInfo.block_number;
     newTrade.timestamp = basicInfo.block_timestamp;
-
+    newTrade.dayTimestamp = basicInfo.block_timestamp.div(TIME_HOURS).div(TIME_MINUTES).div(TIME_SECONDS)
     newTrade.amountGet = amountGet;
     newTrade.amountGive = amountGive;
     newTrade.tokenGet = getOrCreateToken(tokenGet).id;
@@ -204,7 +210,7 @@ export function InternalHandleDeposit(basicInfo: BasicInfo, user: Address, amoun
     let newDeposit = new Deposit(basicInfo.tx_id);
     newDeposit.block_number = basicInfo.block_number;
     newDeposit.timestamp = basicInfo.block_timestamp;
-
+    newDeposit.dayTimestamp = basicInfo.block_timestamp.div(TIME_HOURS).div(TIME_MINUTES).div(TIME_SECONDS)
     newDeposit.user = user.toHexString();
     newDeposit.amount = amount;
     newDeposit.token = getOrCreateToken(token).id;
@@ -252,7 +258,7 @@ export function InternalHandleWithdraw(basicInfo: BasicInfo, user: Address, amou
     let newWithdraw = new Withdraw(basicInfo.tx_id);
     newWithdraw.block_number = basicInfo.block_number;
     newWithdraw.timestamp = basicInfo.block_timestamp;
-
+    newWithdraw.dayTimestamp = basicInfo.block_timestamp.div(TIME_HOURS).div(TIME_MINUTES).div(TIME_SECONDS)
     newWithdraw.user = user.toHexString();
     newWithdraw.amount = amount;
     newWithdraw.token = getOrCreateToken(token).id;
@@ -302,6 +308,7 @@ export function InternalHandleCancel(basicInfo: BasicInfo, amountGet: BigInt, am
     let newCancel = new Cancel(basicInfo.tx_id)
     newCancel.block_number = basicInfo.block_number;
     newCancel.timestamp = basicInfo.block_timestamp;
+    newCancel.dayTimestamp = basicInfo.block_timestamp.div(TIME_HOURS).div(TIME_MINUTES).div(TIME_SECONDS)
     newCancel.user = user.toHexString();
     newCancel.amountGet = amountGet;
     newCancel.amountGive = amountGive;

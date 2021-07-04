@@ -37,6 +37,7 @@ type Order @entity {
   id: ID!
   block_number: BigInt!
   timestamp: BigInt!
+  dayTimestamp: BigInt!
   user: User!
   amountGive: BigInt!
   amountGet: BigInt!
@@ -49,6 +50,7 @@ type Trade @entity {
   id: ID!
   block_number: BigInt!
   timestamp: BigInt!
+  dayTimestamp: BigInt!
   amountGive: BigInt!
   amountGet: BigInt!
   tokenGive: Token!
@@ -61,6 +63,7 @@ type Deposit @entity {
   id: ID!
   block_number: BigInt!
   timestamp: BigInt!
+  dayTimestamp: BigInt!
   user: User!
   amount: BigInt!
   token: Token!
@@ -70,6 +73,7 @@ type Withdraw @entity {
   id: ID!
   block_number: BigInt!
   timestamp: BigInt!
+  dayTimestamp: BigInt!
   user: User!
   amount: BigInt!
   token: Token!
@@ -79,6 +83,7 @@ type Cancel @entity {
   id: ID!
   block_number: BigInt!
   timestamp: BigInt!
+  dayTimestamp: BigInt!
   user: User!
   amountGive: BigInt!
   amountGet: BigInt!

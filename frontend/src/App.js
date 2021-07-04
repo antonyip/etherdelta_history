@@ -20,7 +20,7 @@ import { Line, Bar } from 'react-chartjs-2';
 import './App.css'
 import Header from './components/Header'
 import MainGraph from './components/MainGraph'
-import TradeDetails from './components/TradeDetails'
+import TradeDetails from './components/MainGraph/TradeDetails'
 //import TradeDetails2 from './components/TradeDetails2'
 import Error from './components/Error'
 //import Gravatars from './components/Gravatars'
@@ -161,7 +161,6 @@ class App extends Component {
       <MainGraph
       DaysFrom1970={DaysFrom1970}
       ></MainGraph>
-      {/* <TradeDetails></TradeDetails> */}
       </Grid>
     )
   }

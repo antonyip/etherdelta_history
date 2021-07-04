@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState} from 'react'
 //import ApolloClient, { InMemoryCache, gql, useQuery} from 'apollo-boost'
 //import { ApolloProvider, Query, withApollo } from 'react-apollo'
 import {
@@ -28,44 +28,38 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-// client
-//   .query({
-//     query: gql`
-//     {
-//       activities(id: "17048") {
-//         id
-//       }
-//     }
-//     `
-//   })
-//   .then(result => {console.log("1");console.log(result);console.log("2");});
-
 const QUERY=gql`
+query trades($wherea: BigInt! = 17167)
 {
-  activities(id: "17048") {
+  trades(
+    where: {dayTimestamp: $wherea},
+  ) {
     id
   }
 }
 `
 
-function ExchangeRates() {
-  const { loading, error, data } = useQuery(QUERY);
+function TradesThatHappened({aaa}) {
+  const { loading, error, data } = useQuery(QUERY, {variables: {wherea: {aaa}.aaa}});
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  return data.activities.map(({ id }) => (
+  return data.trades.map(({ id }) => (
     <div key={id}>
-      <p>
-        {id}: {id}
-      </p>
+      <a href="https://etherscan.io/tx/{{id}}#eventlog">
+      https://etherscan.io/tx/{id}#eventlog
+      </a>
     </div>
   ));
 }
 
-const TradeDetails = ({  }) => (
+const TradeDetails = ({ DaysFrom1970 }) => (
   <Grid container direction="row" alignItems="center">
     <ApolloProvider client={client}>
-      <ExchangeRates></ExchangeRates>
+      Trades that happened on {DaysFrom1970}
+      <TradesThatHappened
+      aaa={DaysFrom1970}
+      ></TradesThatHappened>
     </ApolloProvider>
   </Grid>
 )
