@@ -27,7 +27,7 @@ const client = new ApolloClient({
 })
 
 const QUERY=gql`
-query trades($wherea: BigInt! = 17167)
+query trades($wherea: BigInt! = 17168)
 {
   trades(
     where: {dayTimestamp: $wherea}
@@ -60,7 +60,7 @@ query trades($wherea: BigInt! = 17167)
 `
 
 const QUERY2=gql`
-query deposits($wherea: BigInt! = 17167)
+query deposits($wherea: BigInt! = 17168)
 {
 deposits(
   where: {dayTimestamp: $wherea},
@@ -124,7 +124,7 @@ const TradeDetails = ({ DaysFrom1970 , DateOffset, mode}) => (
     mode == 1? (
     <Grid container direction="row" alignItems="center">
     <ApolloProvider client={client}>
-      <Grid item xs={12}>Trades that happened on {DaysFrom1970 + DateOffset}</Grid>
+      <Grid item xs={12}>Trades that happened on {new Date((DaysFrom1970 + DateOffset)*24*60*60*1000).toLocaleDateString()}</Grid>
       <Grid item xs={12}>
       <TradesThatHappened
       aaa={DaysFrom1970 + DateOffset}

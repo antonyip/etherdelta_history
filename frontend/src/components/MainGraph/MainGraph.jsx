@@ -29,7 +29,7 @@ const client = new ApolloClient({
 })
 
 const QUERY=gql`
-query activities($wherea: BigInt! = 17167) {
+query activities($wherea: BigInt! = 17168) {
   activities(
   orderBy: id,
   orderDirection: asc,
@@ -385,7 +385,7 @@ function MainGraphQuery2({aaa}) {
   ;
 }
 
-const MainGraph = ({ DaysFrom1970 = 17167, mode }) => (
+const MainGraph = ({ DaysFrom1970 = 17168, mode }) => (
   <Grid container direction="row">
     { mode == 1 ? (
       <ApolloProvider client={client}>

@@ -1,8 +1,4 @@
 import React, { Component, useState } from 'react'
-//import ApolloClient, { gql, InMemoryCache } from 'apollo-boost'
-import { Query, Mutation, Subscription } from '@apollo/client/react/components';
-import { graphql } from '@apollo/client/react/hoc';
-//import { ApolloProvider, Query, withApollo } from 'react-apollo'
 import {
   ApolloClient,
   InMemoryCache,
@@ -16,91 +12,10 @@ import {
   LinearProgress,
   TextField,
 } from '@material-ui/core'
-import { Line, Bar } from 'react-chartjs-2';
 import './App.css'
 import Header from './components/Header'
 import MainGraph from './components/MainGraph'
-import TradeDetails from './components/MainGraph/TradeDetails'
-//import TradeDetails2 from './components/TradeDetails2'
-import Error from './components/Error'
-//import Gravatars from './components/Gravatars'
 import Filter from './components/Filter'
-if (!process.env.REACT_APP_GRAPHQL_ENDPOINT) {
-  throw new Error('REACT_APP_GRAPHQL_ENDPOINT environment variable not defined')
-}
-
-const client = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
-  cache: new InMemoryCache(),
-})
-
-//query gravatars($where: Gravatar_filter!, $orderBy: Gravatar_orderBy!) {
-const GRAVATARS_QUERY = gql` 
-{
-  tokenActivities(first: 5) {
-    id
-    tradeCount
-    withdrawCount
-    depositCount
-    orderCount
-    cancelCount
-  }
-}
-`
-
-//where: $where,
-//$where: String
-const GRAVATARS_QUERY2bak = gql` 
-query activities($timestamp: BigInt)
-{
-  activities(
-  orderBy: "id",
-  orderDirection: "asc",
-  dayTimestamp_gt: $timestamp
-  first: 90)
-  {
-    id
-    TotalOrderCount
-    TotalCancelCount
-    NetOrderCount
-    TotalDeposits
-    TotalWithdraws
-    NetDeposits
-    TotalTradeCount
-  }
-}
-`
-//where: {dayTimestamp_gt: $timestamp},
-//where: $timestamp,
-const GRAVATARS_QUERY2 = gql`
-query activities($wherea: BigInt! = 17000) {
-  activities(
-  orderBy: id,
-  orderDirection: asc,
-  where: {dayTimestamp_gt: $wherea},
-  first: 90)
-  {
-    id
-    TotalOrderCount
-    TotalCancelCount
-    NetOrderCount
-    TotalDeposits
-    TotalWithdraws
-    NetDeposits
-    TotalTradeCount
-    dayTimestamp
-  }
-}
-`
-
-//query gravatars($where: activities_filter!, $orderBy: activities_orderBy!) {
-const GRAVATARS_QUERY3 = gql` 
-query GetDogs($WhatIWant: Int) {
-    users(first: $WhatIWant) {
-      id
-  }
-}
-`
 
 class App extends Component {
   constructor(props) {
@@ -111,7 +26,7 @@ class App extends Component {
       orderBy: 'displayName',
       showHelpDialog: false,
       Var1: 0,
-      startDate: 17167, // days since epoch (17167 = 2017-jan-01)
+      startDate: 17168, // days since epoch (17167 = 2017-jan-01)
     }
   }
 
@@ -121,16 +36,6 @@ class App extends Component {
 
   gotoQuickStartGuide = () => {
     window.location.href = 'https://thegraph.com/docs/quick-start'
-  }
-
-  UpdateTop = (a,b) => {
-    console.log("datasetIndex", a);
-    console.log("index", b);
-  }
-
-  UpdateBottom = (a,b) => {
-    console.log("datasetIndex", a);
-    console.log("index", b);
   }
 
   render() {
