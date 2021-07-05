@@ -160,6 +160,11 @@ class App extends Component {
         />
       <MainGraph
       DaysFrom1970={DaysFrom1970}
+      mode = {1}
+      ></MainGraph>
+      <MainGraph
+      DaysFrom1970={DaysFrom1970}
+      mode = {2}
       ></MainGraph>
       </Grid>
     )
