@@ -29,4 +29,5 @@ Refer to Readme in the frontend photos
 ![frontend](./screenshots/backend.PNG)
 - On X Day, What are the tokens that interacted with EtherDelta
 ![frontend](./screenshots/specificCapture.PNG)
-
+- Deposits
+![frontend](./screenshots/deposits.PNG)
