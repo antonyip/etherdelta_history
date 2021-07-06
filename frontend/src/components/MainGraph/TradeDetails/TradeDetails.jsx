@@ -151,7 +151,7 @@ const TradeDetails = ({ DaysFrom1970 , DateOffset, mode}) => (
       <Grid container direction="row" alignItems="center">
       <ApolloProvider client={client}>
         <Grid item xs={2}></Grid>
-        <Grid item xs={8}>Deposits/Withdraws that happened on {DaysFrom1970 +1 + DateOffset}</Grid>
+        <Grid item xs={8}>Deposits/Withdraws that happened on {new Date((DaysFrom1970 +1 + DateOffset)*24*60*60*1000).toLocaleDateString()}</Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={2}>Users</Grid>

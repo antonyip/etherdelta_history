@@ -52,11 +52,6 @@ class App extends Component {
         <Grid item xs={2}></Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={8}>
-          <Button 
-          mode={1}
-          onClick={() => this.setState( state => ({ ...state, mode:1 }))}>Trades</Button>
-          <Button onClick={() => this.setState( state => ({ ...state, mode:2 }))}>Deposits</Button>
-          <Button onClick={() => this.setState( state => ({ ...state, mode:3 }))}>Withdrawals</Button>
         </Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={2}></Grid>
@@ -85,7 +80,11 @@ class App extends Component {
         <Grid item xs={12}>
           <MainGraph
           DaysFrom1970={DaysFrom1970}
-          mode = {mode}
+          mode = {1}
+          ></MainGraph>
+          <MainGraph
+          DaysFrom1970={DaysFrom1970}
+          mode = {2}
           ></MainGraph>
       </Grid>
       </Grid>

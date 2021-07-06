@@ -424,15 +424,18 @@ class MainGraph extends Component {
                 </ApolloProvider>
               ) : (
                 <ApolloProvider client={client}>
-                <Grid item xs={6}>
-                  <MainGraphQuery2
+                  <Grid item xs={2}></Grid>
+                <Grid item xs={8}>
+                <MainGraphQuery2
                   aaa={this.state.DaysFrom1970}
+                  onDateChange={(field) => { this.setState(state => ({...state, dateOffset: field})); console.log("onDateChange" + dateOffset)}}
                   ></MainGraphQuery2>
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={2}></Grid>
+                  <Grid item xs={12}>
                   <TradeDetails
                   DaysFrom1970={this.state.DaysFrom1970}
-                  DateOffset={this.state.dateOffset}
+                  DateOffset={dateOffset}
                   mode={this.state.mode}
                   ></TradeDetails>
                   </Grid>
