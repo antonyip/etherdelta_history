@@ -7,6 +7,9 @@ Frontend is able to see how has EtherDelta evolve through the CryptoCurrency Boo
 Clicking on the nodes on the graph will allow you to zoom into nodes and see the trades that occured for the day.
 It will also link to etherscan.io if you want the more raw details.
 
+## Demo
+https://etherdelta-history-antonyip.vercel.app/
+
 ## Diary
 Sadly, I've only like 1-2 months of react experience and had a tough time trying to figure out the interaction between the examples that were given.
 
