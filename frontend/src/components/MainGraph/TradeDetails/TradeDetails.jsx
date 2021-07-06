@@ -27,7 +27,7 @@ const client = new ApolloClient({
 })
 
 const QUERY=gql`
-query trades($wherea: BigInt! = 17168)
+query trades($wherea: BigInt! = 17167)
 {
   trades(
     where: {dayTimestamp: $wherea}
@@ -60,7 +60,7 @@ query trades($wherea: BigInt! = 17168)
 `
 
 const QUERY2=gql`
-query deposits($wherea: BigInt! = 17168)
+query deposits($wherea: BigInt! = 17167)
 {
 deposits(
   where: {dayTimestamp: $wherea},
@@ -82,9 +82,9 @@ function truncate(name)
 {
   let returnName = name;
   let lenName = name.length;
-  if (lenName > 8)
+  if (lenName > 12)
   {
-    returnName = name[0]+name[1]+name[2]+name[3]+name[4]+"..."+name[lenName-3]+name[lenName-2]+name[lenName-1];
+    returnName = name[0]+name[1]+name[2]+name[3]+name[4]+name[5]+name[6]+"..."+name[lenName-5]+name[lenName-4]+name[lenName-3]+name[lenName-2]+name[lenName-1];
   }
   return returnName;
 }
@@ -95,12 +95,19 @@ function TradesThatHappened({aaa}) {
   if (error) return <p>Error :(</p>;
 
   return data.trades.map(({ id, amountGive, amountGet, tokenGive, tokenGet, getUser,giveUser }) => (
-    <div key={id}>
-      <p>{"users: " + truncate(giveUser.id) + ' -> ' + truncate(getUser.id)}</p>
-      <p>{"tokens: " + truncate(tokenGive.id) + ' -> ' + truncate(tokenGet.id)}</p>
-      <p>{"amounts: " + amountGive +  '-> ' + amountGet}</p>
+    <Grid container xs={12} alignItems="center">
+      <Grid item xs={2}></Grid>
+      <Grid item xs={2}>
+      {truncate(giveUser.id) + "  -> " + truncate(getUser.id)}
+      </Grid><Grid item xs={2}>
+      {truncate(tokenGive.id) + ' -> ' + truncate(tokenGet.id)}
+      </Grid><Grid item xs={3}>
+      {amountGive +  '-> ' + amountGet}
+      </Grid><Grid item xs={1}>
       <a href={"https://etherscan.io/tx/"+id+"#eventlog"}>link</a>
-    </div>
+      </Grid>
+      <Grid item xs={2}></Grid>
+    </Grid>
   ));
 }
 
@@ -124,7 +131,15 @@ const TradeDetails = ({ DaysFrom1970 , DateOffset, mode}) => (
     mode == 1? (
     <Grid container direction="row" alignItems="center">
     <ApolloProvider client={client}>
-      <Grid item xs={12}>Trades that happened on {new Date((DaysFrom1970 + DateOffset)*24*60*60*1000).toLocaleDateString()}</Grid>
+      <Grid item xs={2}></Grid>
+      <Grid item xs={8}>Trades that happened on {new Date((DaysFrom1970 +1 + DateOffset)*24*60*60*1000).toLocaleDateString()}</Grid>
+      <Grid item xs={2}></Grid>
+      <Grid item xs={2}></Grid>
+      <Grid item xs={2}>Users</Grid>
+      <Grid item xs={2}>Tokens</Grid>
+      <Grid item xs={3}>Amount</Grid>
+      <Grid item xs={1}>Links</Grid>
+      <Grid item xs={2}></Grid>
       <Grid item xs={12}>
       <TradesThatHappened
       aaa={DaysFrom1970 + DateOffset}
@@ -135,12 +150,20 @@ const TradeDetails = ({ DaysFrom1970 , DateOffset, mode}) => (
     ) :(
       <Grid container direction="row" alignItems="center">
       <ApolloProvider client={client}>
-        <Grid item xs={12}>Deposits/Withdraws that happened on {DaysFrom1970 + DateOffset}</Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>Deposits/Withdraws that happened on {DaysFrom1970 +1 + DateOffset}</Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={2}>Users</Grid>
+        <Grid item xs={2}>Tokens</Grid>
+        <Grid item xs={3}>Amount</Grid>
+        <Grid item xs={1}>Links</Grid>
+        <Grid item xs={2}></Grid>
         <Grid item xs={12}>
-        <TradesThatHappened2
-        aaa={DaysFrom1970 + DateOffset}
-        ></TradesThatHappened2>
-        </Grid>
+      <TradesThatHappened
+      aaa={DaysFrom1970 + DateOffset}
+      ></TradesThatHappened>
+      </Grid>
       </ApolloProvider>
     </Grid>
     )

@@ -29,7 +29,7 @@ const client = new ApolloClient({
 })
 
 const QUERY=gql`
-query activities($wherea: BigInt! = 17168) {
+query activities($wherea: BigInt! = 17167) {
   activities(
   orderBy: id,
   orderDirection: asc,
@@ -67,7 +67,7 @@ let dataArrTradesSumY = [] ;
 
 let dateOffset = 0;
 
-function MainGraphQuery({aaa}) {
+function MainGraphQuery({aaa, onDateChange}) {
   const { loading, error, data } = useQuery(QUERY, {variables: {wherea: {aaa}.aaa}});
 
 //   const  getElementsAtEvent = elements => {
@@ -82,6 +82,7 @@ function MainGraphQuery({aaa}) {
     //this.UpdateTop(datasetIndex, index);
     dateOffset = index;
     console.log(datasetIndex, index);
+    onDateChange(index);
     // setClickedElement(
     //   `${data.labels[index]} - ${data.datasets[datasetIndex].data[index]}`
     // );
@@ -90,6 +91,7 @@ function MainGraphQuery({aaa}) {
   let getDatasetAtEvent = dataset => {
     if (!dataset.length) return;
     const datasetIndex = dataset[0].datasetIndex;
+
     //this.UpdateTop(null, dataset[0].datasetIndex);
     // setClickedDataset(data.datasets[datasetIndex].label);
   }
@@ -385,40 +387,59 @@ function MainGraphQuery2({aaa}) {
   ;
 }
 
-const MainGraph = ({ DaysFrom1970 = 17168, mode }) => (
-  <Grid container direction="row">
-    { mode == 1 ? (
-      <ApolloProvider client={client}>
-      <Grid item xs={6}>
-      <MainGraphQuery
-        aaa={DaysFrom1970}
-        ></MainGraphQuery>
-        </Grid>
-        <Grid item xs={6}>
-        <TradeDetails
-        DaysFrom1970={DaysFrom1970}
-        DateOffset={dateOffset}
-        mode={mode}
-        ></TradeDetails>
-        </Grid>
-      </ApolloProvider>
-    ) : (
-      <ApolloProvider client={client}>
-      <Grid item xs={6}>
-        <MainGraphQuery2
-        aaa={DaysFrom1970}
-        ></MainGraphQuery2>
-        </Grid>
-        <Grid item xs={6}>
-        <TradeDetails
-        DaysFrom1970={DaysFrom1970}
-        DateOffset={dateOffset}
-        mode={mode}
-        ></TradeDetails>
-        </Grid>
-      </ApolloProvider>
-    )};
-  </Grid>
-)
+class MainGraph extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dateOffset: 0,
+      DaysFrom1970: 17167,
+      mode: props.mode,
+    };
+  }
 
+
+
+  render() {
+    let { dateOffset } = this.state
+
+    return (
+            <Grid container direction="row">
+              { this.state.mode == 1 ? (
+                <ApolloProvider client={client}>
+                  <Grid item xs={2}></Grid>
+                <Grid item xs={8}>
+                <MainGraphQuery
+                  aaa={this.state.DaysFrom1970}
+                  onDateChange={(field) => { this.setState(state => ({...state, dateOffset: field})); console.log("onDateChange" + dateOffset)}}
+                  ></MainGraphQuery>
+                  </Grid>
+                  <Grid item xs={2}></Grid>
+                  <Grid item xs={12}>
+                  <TradeDetails
+                  DaysFrom1970={this.state.DaysFrom1970}
+                  DateOffset={dateOffset}
+                  mode={this.state.mode}
+                  ></TradeDetails>
+                  </Grid>
+                </ApolloProvider>
+              ) : (
+                <ApolloProvider client={client}>
+                <Grid item xs={6}>
+                  <MainGraphQuery2
+                  aaa={this.state.DaysFrom1970}
+                  ></MainGraphQuery2>
+                  </Grid>
+                  <Grid item xs={6}>
+                  <TradeDetails
+                  DaysFrom1970={this.state.DaysFrom1970}
+                  DateOffset={this.state.dateOffset}
+                  mode={this.state.mode}
+                  ></TradeDetails>
+                  </Grid>
+                </ApolloProvider>
+              )};
+            </Grid>
+          );
+    }
+  }
 export default MainGraph

@@ -11,6 +11,7 @@ import {
   Grid,
   LinearProgress,
   TextField,
+  Button,
 } from '@material-ui/core'
 import './App.css'
 import Header from './components/Header'
@@ -26,7 +27,8 @@ class App extends Component {
       orderBy: 'displayName',
       showHelpDialog: false,
       Var1: 0,
-      startDate: 17168, // days since epoch (17167 = 2017-jan-01)
+      startDate: 17167, // days since epoch (17167 = 2017-jan-01)
+      mode: 1,
     }
   }
 
@@ -39,11 +41,26 @@ class App extends Component {
   }
 
   render() {
-    let { withImage, withName, orderBy, showHelpDialog, dateChange, DaysFrom1970 } = this.state
+    let { withImage, withName, orderBy, showHelpDialog, dateChange, DaysFrom1970, mode } = this.state
 
     return (
-      <Grid>
+      <Grid container>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
         <Header onHelp={this.toggleHelpDialog} />
+        </Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
+          <Button 
+          mode={1}
+          onClick={() => this.setState( state => ({ ...state, mode:1 }))}>Trades</Button>
+          <Button onClick={() => this.setState( state => ({ ...state, mode:2 }))}>Deposits</Button>
+          <Button onClick={() => this.setState( state => ({ ...state, mode:3 }))}>Withdrawals</Button>
+        </Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
         <Filter
               orderBy={orderBy}
               withImage={withImage}
@@ -63,14 +80,14 @@ class App extends Component {
                 console.log(DaysFrom1970);
               }}
         />
-      <MainGraph
-      DaysFrom1970={DaysFrom1970}
-      mode = {1}
-      ></MainGraph>
-      <MainGraph
-      DaysFrom1970={DaysFrom1970}
-      mode = {2}
-      ></MainGraph>
+        </Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={12}>
+          <MainGraph
+          DaysFrom1970={DaysFrom1970}
+          mode = {mode}
+          ></MainGraph>
+      </Grid>
       </Grid>
     )
   }
