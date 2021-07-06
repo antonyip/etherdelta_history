@@ -116,13 +116,25 @@ function TradesThatHappened2({aaa}) {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
   return data.deposits.map(({ id , user, amount, balance, token}) => (
-    <div key={id}>
-      <p>{"user: " + truncate(user.id)}</p>
-      <p>{"tokens " + truncate(token.id) }</p>
-      <p>{"amount: " + amount}</p>
-      <p>{"balance: " + balance}</p>
+    <Grid container xs={12} alignItems="center">
+      <Grid item xs={2}></Grid>
+      <Grid item xs={2}>
+      {truncate(user.id)}
+      </Grid>
+      <Grid item xs={1}>
+      {truncate(token.id)}
+      </Grid>
+      <Grid item xs={2}>
+      {amount}
+      </Grid>
+      <Grid item xs={2}>
+      {balance}
+      </Grid>
+      <Grid item xs={1}>
       <a href={"https://etherscan.io/tx/"+id+"#eventlog"}>link</a>
-    </div>
+      </Grid>
+      <Grid item xs={2}></Grid>
+    </Grid>
   ));
 }
 
@@ -155,14 +167,15 @@ const TradeDetails = ({ DaysFrom1970 , DateOffset, mode}) => (
         <Grid item xs={2}></Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={2}>Users</Grid>
-        <Grid item xs={2}>Tokens</Grid>
-        <Grid item xs={3}>Amount</Grid>
+        <Grid item xs={1}>Tokens</Grid>
+        <Grid item xs={2}>Amount</Grid>
+        <Grid item xs={2}>Balance</Grid>
         <Grid item xs={1}>Links</Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={12}>
-      <TradesThatHappened
+      <TradesThatHappened2
       aaa={DaysFrom1970 + DateOffset}
-      ></TradesThatHappened>
+      ></TradesThatHappened2>
       </Grid>
       </ApolloProvider>
     </Grid>
